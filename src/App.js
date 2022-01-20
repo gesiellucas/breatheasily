@@ -15,8 +15,8 @@ export default function App(){
     const hold = setInterval( ()=>{
         document.getElementById('hold').innerHTML = p++;
         if(p>6){
-            clearInterval(hold);
             p = 0;
+            // clearInterval(hold);
             exhale();
         }
     },1000 );
@@ -24,7 +24,7 @@ export default function App(){
     const inhale = setInterval( ()=>{
         document.getElementById('inhale').innerHTML = j++;
         if(j>4){
-            clearInterval(inhale);
+            // clearInterval(inhale);
             j = 0;
             hold();
         }
@@ -33,7 +33,7 @@ export default function App(){
     const exhale = setInterval( ()=>{
         document.getElementById('exhale').innerHTML = z++;
         if(z>8){
-            clearInterval(exhale);
+            // clearInterval(exhale);
             z = 0;
             wait();
         }
@@ -42,7 +42,7 @@ export default function App(){
     const wait = setInterval( ()=>{
         document.getElementById('wait').innerHTML = l++;
         if(l>7){
-            clearInterval(wait);
+            // clearInterval(wait);
             l = 0;
             inhale();
         }
