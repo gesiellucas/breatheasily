@@ -1,10 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import './style.css';
+import { animated, useSpring } from '@react-spring/web';
 
 export default function App(){
-
+    const [state, setState] = useState(3000);
+    const [scale, setScale] = useState('scale(1)');
+    const [scaleBack, setScaleBack] = useState('scale(2)');
+    const [texto, setTexto] = useState('Respire');
+    const style = useSpring({
+        from:{
+            opacity: 0,
+            backgroundColor: 'blue',
+            transform: scale
+        },
+        to:{
+            opacity: 1,
+            backgroundColor: 'red',
+            transform: scaleBack
+        },
+        delay: 2000,
+        config: {
+            duration: state
+        }
+    });
     useEffect( ()=>{
         AppTime()
-    },[]);
+    },state);
 
     let j = 0;
     let p = 0;
@@ -12,67 +33,85 @@ export default function App(){
     let i = 0;
     let l = 0;
 
-    const hold = setInterval( ()=>{
-        document.getElementById('hold').innerHTML = p++;
-        if(p>6){
-            p = 0;
-            // clearInterval(hold);
-            exhale();
-        }
-    },1000 );
+    function hold(){
+        const hold1 = setInterval( ()=>{
+            setTexto('Segure...')
+            if(p>7){
+                p = 0;
+                clearInterval(hold1);
+                exhale();
+                setState(7000);
+                setScale('scale(1.5)');
+                setScaleBack('scale(1.5)');
+                
+            }
+        },1000 );
+    }
 
-    const inhale = setInterval( ()=>{
-        document.getElementById('inhale').innerHTML = j++;
-        if(j>4){
-            // clearInterval(inhale);
-            j = 0;
-            hold();
-        }
-    },1000 );
+    function inhale(){
+        const inhale1 = setInterval( ()=>{
+            setTexto('Respire...')
+            if(j>4){
+                setState(4000);
+                setScale('scale(1)');
+                setScaleBack('scale(1.5)');
+                
+                clearInterval(inhale1);
+                j = 0;
 
-    const exhale = setInterval( ()=>{
-        document.getElementById('exhale').innerHTML = z++;
-        if(z>8){
-            // clearInterval(exhale);
-            z = 0;
-            wait();
-        }
-    },1000 );
+                hold();
+            }
+        },1000 );
+    }
 
-    const wait = setInterval( ()=>{
-        document.getElementById('wait').innerHTML = l++;
-        if(l>7){
-            // clearInterval(wait);
-            l = 0;
-            inhale();
+    function exhale(){
+        const exhale1 = setInterval( ()=>{
+            setTexto('Solte...')            
+            if(z>8){
+                setState(8000);
+                setScale('scale(1.5)');
+                setScaleBack('scale(1)');
+                
+                clearInterval(exhale1);
+                z = 0;
+                wait();
+            }
+        },1000 );
+    } 
+
+    const wait = ()=>{
+        
+        const wait1 = setInterval( ()=>{
+            setTexto('Espere...')
+            if(l>1){
+                setState(1000);
+                setScale('scale(1.5)');
+                setScaleBack('scale(1.5)');
+                
+                clearInterval(wait1);
+                l = 0;
+                inhale();
         }
     },1000 )
+    }
 
     function AppTime(){
+
+        inhale();
        
         setTimeout(()=>{
 
-            const counter = setInterval(() => {
-                document.getElementById('inspire').innerHTML = i++;
-                if(i>10){
-                    i=0;
-                }
-            }, 1000);
-            inhale();
-        },1000);
+            
+        },10000);
     }
     return(
         <>
             <h1>Breath easily</h1>
-            <div id="hold"></div>
-            <br/>
-            <div id="inspire"></div>
-            <br/>
-            <div id="inhale"></div>
-            <br/>
-            <div id="exhale"></div>
-            <br/>
-            <div id="wait"></div>
+            <h2>{texto}</h2>
+
+            <div className='scene'>
+                <animated.div id='app' style={style} />
+            </div>
         </>
     )
 }
